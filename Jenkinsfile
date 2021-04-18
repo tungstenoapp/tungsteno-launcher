@@ -21,7 +21,8 @@ pipeline {
                 sh "npm install"
                 sh "npx electron-packager . tungsteno-launcher --out build/"
                 sh "zip -r build.zip build/*"
-                // sh "mcli cp build.zip s3/tungsteno-releases/linux/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.$BUILD_ID.zip"
+                sh "sleep 5"
+                sh "mcli cp build.zip s3/tungsteno-releases/linux/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.$BUILD_ID.zip"
             }
         }
 
