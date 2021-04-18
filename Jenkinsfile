@@ -19,7 +19,7 @@ pipeline {
         stage('Generate build (Linux Binary)') {
             steps {
                 sh "npm install"
-                sh "npx electron-packager . tungsteno-launcher --out build/"
+                sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite"
                 sh "zip -r build.zip build/*"
                 // sh "sleep 5"
                 // sh "mcli cp build.zip s3/tungsteno-releases/linux/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.$BUILD_ID.zip"
@@ -32,7 +32,7 @@ pipeline {
                 checkout scm
 
                 bat "npm install"
-                bat "npx electron-packager . tungsteno-launcher --out build/"
+                bat "npx electron-packager . tungsteno-launcher --out build/ --overwrite"
                 // bat "C:\\mc.exe cp dist/tungsteno.exe s3/tungsteno-releases/windows/%RELEASE_TYPE%/tungsteno-amd64-%MAJOR_RELEASE%.%MINOR_RELEASE%.%BUILD_ID%.exe"
 
                 // deleteDir()
