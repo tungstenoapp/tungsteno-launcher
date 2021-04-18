@@ -35,7 +35,7 @@ pipeline {
                 bat "npx electron-packager . tungsteno-launcher --out build/"
                 // bat "C:\\mc.exe cp dist/tungsteno.exe s3/tungsteno-releases/windows/%RELEASE_TYPE%/tungsteno-amd64-%MAJOR_RELEASE%.%MINOR_RELEASE%.%BUILD_ID%.exe"
 
-                // deleteDir()
+                deleteDir()
             }
         }
 

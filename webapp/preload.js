@@ -18,9 +18,9 @@ const {
 function getOS() {
     var os = process.platform;
     if (os == "darwin") {
-        os = "mac";
+        os = "macos";
     } else if (os == "win32" || os == "win64") {
-        os = "win";
+        os = "windows";
     } else if (os == "linux") {
         os = "linux";
     }

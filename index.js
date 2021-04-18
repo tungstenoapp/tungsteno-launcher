@@ -6,15 +6,15 @@ const path = require('path')
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 850,
-    height: 600,
+    width: 650,
+    height: 400,
     webPreferences: {
       preload: path.join(__dirname, 'webapp', 'preload.js'),
       nodeIntegration: true,
     }
   })
 
-  // win.setMenuBarVisibility(false)
+  win.setMenuBarVisibility(false)
 
   win.loadFile('webapp/index.html')
 }
