@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tungsteno Launcher 1.0</title>
+    <link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css" />
+
+    <script type="text/javascript">
+        function downloadLatestTungsteno(progressBar) {
+            progressBar.style.display = 'block';
+            let os = window.electron.getOS();
+            let basePath = 'https://download.tungsteno.app/v1/releases/' + os + '/stable';
+
+
+            return getLatestRelease().then(latestRelease => {
+                    return window.electron.downloadTungsteno(latestRelease, basePath)
+                })
+                .then(_ => {
+                    progressBar.style.display = 'none';
+                })
+        }
+
+        function getLatestRelease() {
+            let latestRelease;
+            let os = window.electron.getOS();
+            let basePath = 'https://download.tungsteno.app/v1/releases/' + os + '/stable';
+            return fetch(basePath)
+                .then(async data => {
+                    let releases = await data.json();
+                    latestRelease = releases[0];
+
+                    return Promise.resolve(latestRelease);
+                });
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            let newDocumentBtn = document.getElementById('new-document-button');
+            let downloadBtn = document.getElementById('download-tungsteno-button');
+            let updateNotification = document.getElementById('update-available');
+            let progressBar = document.getElementById('download-progress-bar');
+
+            let installedVersion = window.electron.getInstalledVersion();
+
+            if (null === installedVersion) {
+                downloadBtn.style.display = 'block';
+            } else {
+                newDocumentBtn.style.display = 'block';
+            }
+
+            downloadBtn.addEventListener('click', async function () {
+                await downloadLatestTungsteno(progressBar);
+
+                downloadBtn.style.display = 'none';
+                updateNotification.style.display = 'none';
+
+                newDocumentBtn.style.display = 'block';
+            });
+
+            newDocumentBtn.addEventListener('click', async function () {
+                window.electron.launchTungsteno();
+                await window.electron.waitUntilTungstenoReachable();
+                window.location = 'http://localhost:8000';
+            });
+
+            let latestRelease = await getLatestRelease();
+
+            if (installedVersion && latestRelease.Time > installedVersion.Time) {
+                updateNotification.style.display = 'block';
+                downloadBtn.style.display = 'block';
+            }
+
+        });
+    </script>
+</head>
+
+<body>
+    <section class="container">
+        <div class="columns p-3">
+            <div class="column">
+                <h1 class="title is-1">Tungsteno Launcher</h1>
+                <h2 class="subtitle colored is-4">
+                    <span class="tag is-warning is-light">1.0</span>
+                    <span class="tag is-primary is-light">beta</span>
+                </h2>
+                <div class="block">
+                    <div class="block">
+                        <div id="update-available" style="display: none" class="notification is-primary">
+                            <strong>New release available!</strong> Please update!
+                        </div>
+                        <button id="download-tungsteno-button" class="button is-fullwidth is-success"
+                            style="display: none;">Download Tungsteno</button>
+                    </div>
+                    <div class="block">
+                        <button id="new-document-button" class="button is-fullwidth is-warning"
+                            style="display: none;">Launch Tungsteno</button>
+                    </div>
+
+                    <div class="block">
+                        <progress id="download-progress-bar" style="display: none" class="progress is-small is-primary"
+                            max="100">Downloading...</progress>
+                    </div>
+                    <!--
+<aside class="menu">
+                        <p class="menu-label">
+                            Recent files
+                        </p>
+                        <ul class="menu-list">
+                            <li><a>Dashboard</a></li>
+                            <li><a>Customers</a></li>
+                        </ul>
+                    </aside>
+                    -->
+
+                </div>
+            </div>
+    </section>
+</body>
+
+<style>
+    html {
+        background-color: #f8f8f8;
+        height: 100%;
+    }
+</style>
+
+</html>
