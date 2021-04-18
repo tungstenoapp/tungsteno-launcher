@@ -14,7 +14,7 @@ function createWindow() {
     }
   })
 
-  win.setMenuBarVisibility(false)
+  // win.setMenuBarVisibility(false)
 
   win.loadFile('webapp/index.html')
 }
