@@ -6,14 +6,13 @@ const {
 const fs = require('fs');
 const path = require('path')
 const download = require('download');
-const request = require("request")
+const http = require("http")
 
-const urlExists = url => new Promise((resolve, reject) => request.head(url).on("response", res => resolve(res.statusCode.toString()[0] === "2")))
+var spawn = require('child_process').spawn;
 
-var exec = require('child_process').exec;
-const {
-    get
-} = require('http');
+const isReachable = require('is-reachable');
+
+let tungstenoPid = null;
 
 function getOS() {
     var os = process.platform;
@@ -45,30 +44,28 @@ function getInstalledVersion() {
     return null;
 }
 
-function launchTungsteno() {
+async function launchTungsteno() {
     let version = getInstalledVersion();
     let launchFile = getAppDataPath(version['Name']);
 
-    exec(launchFile + " --launcher", function (err, stdout, stderr) {
-        if (err) {
-            throw err;
-        }
-    })
+    tungstenoPid = spawn(launchFile, ['--launcher'], {
+        detached: true,
+    });
+
+    console.log(tungstenoPid)
 }
 
 async function waitUntilTungstenoReachable() {
-    let exists = false;
-    try {
-        exists = await urlExists("http://localhost:8000");
-    } catch {}
+    return new Promise(async (resolve, reject) => {
+        let reachable = await isReachable('http://localhost:8000');
 
-    while (!exists) {
-        try {
-            exists = await urlExists("http://localhost:8000");
-        } catch {}
-    }
+        while (!reachable) {
+            reachable = await isReachable('http://localhost:8000');
+        }
 
-    return Promise.resolve();
+        resolve();
+
+    });
 
 }
 

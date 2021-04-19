@@ -62,7 +62,12 @@
             newDocumentBtn.addEventListener('click', async function () {
                 progressBar.style.display = 'block';
 
-                window.electron.launchTungsteno();
+                console.log('HOLA')
+
+                await window.electron.launchTungsteno();
+
+                console.log('HOLA')
+
                 await window.electron.waitUntilTungstenoReachable();
                 window.location = 'http://localhost:8000';
             });
