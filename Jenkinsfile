@@ -33,7 +33,7 @@ pipeline {
                 bat "npm install"
                 bat "npx electron-packager . tungsteno-launcher --out build/ --overwrite"
                 bat "\"c:\\Program Files\\7-zip\\7z.exe\" a -tzip build.zip -r build\tungsteno-launcher-windows-x64\\*"
-                //bat "echo C:\\mc.exe cp dist/tungsteno.exe s3/tungsteno-releases/windows/%RELEASE_TYPE%/tungsteno-amd64-%MAJOR_RELEASE%.%MINOR_RELEASE%.%BUILD_ID%.exe"
+                bat "echo C:\\mc.exe cp build.zip s3/tungsteno-releases/windows/%RELEASE_TYPE%/tungsteno-amd64-%MAJOR_RELEASE%.%MINOR_RELEASE%.%BUILD_ID%.zip"
 
                 deleteDir()
             }
