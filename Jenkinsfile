@@ -20,7 +20,7 @@ pipeline {
             steps {
                 sh "npm install"
                 sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite"
-                sh "zip -r build.zip build/tungsteno-launcher-linux-x64"
+                sh "cd build/tungsteno-launcher-linux-x64; zip -r ../../build.zip ."
                 sh "mcli cp build.zip s3/tungsteno-releases/linux/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.zip"
             }
         }
@@ -32,7 +32,7 @@ pipeline {
 
                 bat "npm install"
                 bat "npx electron-packager . tungsteno-launcher --out build/ --overwrite"
-                bat "\"c:\\Program Files\\7-zip\\7z.exe\" a -tzip build.zip -r build\\tungsteno-launcher-windows-x64"
+                bat "cd build/tungsteno-launcher-windows-x64; \"c:\\Program Files\\7-zip\\7z.exe\" a -tzip ..\\..\\build.zip -r ."
                 bat "C:\\mc.exe cp build.zip s3/tungsteno-releases/windows/%RELEASE_TYPE%/tungsteno-amd64-%MAJOR_RELEASE%.%MINOR_RELEASE%.%BUILD_ID%.zip"
 
                 deleteDir()
