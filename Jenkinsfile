@@ -23,7 +23,7 @@ pipeline {
                 sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --icon=assets/logo_app.png"
                 sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png"
                 sh "npx electron-installer-debian --src build/tungsteno-launcher-linux-x64/ --arch amd64 --config installers/linux/debian.json"
-                sh "node installers/windows/create_installer.js"
+                // sh "node installers/windows/create_installer.js"
                 sh "cd build/tungsteno-launcher-linux-x64; zip -r ../../build-linux.zip ."
                 sh "cd build/tungsteno-launcher-win32-x64; zip -r ../../build-windows.zip ."
 
