@@ -26,15 +26,15 @@ contextMenu({
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 650,
-    height: 500,
+    width: 850,
+    height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'webapp', 'preload.js'),
       nodeIntegration: true,
     }
   })
 
-  win.setMenuBarVisibility(false)
+  // win.setMenuBarVisibility(false)
 
   win.loadFile('webapp/index.html')
 }

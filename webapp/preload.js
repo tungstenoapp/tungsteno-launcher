@@ -89,6 +89,11 @@ async function downloadTungsteno(latestRelease, basePath) {
     return Promise.resolve();
 }
 
+function openOnDefaultBrowser(link) {
+    console.log(link)
+    require("electron").shell.openExternal(link);
+}
+
 contextBridge.exposeInMainWorld(
     'electron', {
         getOS: getOS,
@@ -96,5 +101,6 @@ contextBridge.exposeInMainWorld(
         downloadTungsteno: downloadTungsteno,
         launchTungsteno: launchTungsteno,
         waitUntilTungstenoReachable: waitUntilTungstenoReachable,
+        openOnDefaultBrowser: openOnDefaultBrowser,
     }
 )

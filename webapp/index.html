@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tungsteno Launcher 1.0</title>
     <link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css" />
+    <link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css" />
 
     <script type="text/javascript">
         function downloadLatestTungsteno() {
@@ -32,6 +33,32 @@
                 });
         }
 
+        function getLatestNews() {
+            let latestNewContainer = document.getElementById('latest-news');
+
+            fetch('https://tungsteno.app/index.json')
+                .then(async data => {
+                    let news = await data.json();
+                    let blockHTML = '';
+
+                    for (var i = 0; i < Math.min(news.length, 5); i++) {
+                        let oneNew = news[i];
+
+                        blockHTML += `
+                        <a class="panel-block" onclick="window.electron.openOnDefaultBrowser('${oneNew['permalink']}')">
+                        <span class="panel-icon">
+                            <i class="fas fa-book" aria-hidden="true"></i>
+                        </span>
+                        ${oneNew['title']}
+                        </a>
+                        `
+                    }
+
+                    latestNewContainer.innerHTML = blockHTML;
+
+                });
+        }
+
         function getVersionString(release) {
             return release['MajorRelease'] + '.' + release['MinorRelease'] + '.' + release['Compilation'];
         }
@@ -50,6 +77,8 @@
                 newDocumentBtn.style.display = 'block';
                 newDocumentBtn.innerHTML += ' ' + getVersionString(installedVersion)
             }
+
+            getLatestNews();
 
             downloadBtn.addEventListener('click', async function () {
                 downloadBtn.classList.add('is-loading')
@@ -91,7 +120,7 @@
                         Tungsteno Launcher
                     </h1>
                     <h2 class="subtitle">
-                        <span class="tag is-warning is-light">1.0</span>
+                        <span class="tag is-warning is-light">1.1</span>
                         <span class="tag is-primary is-light">beta</span>
                     </h2>
                 </div>
@@ -99,36 +128,32 @@
         </section>
         <div class="columns p-3">
             <div class="column">
-                <div class="block">
-                    <div class="block">
-                        <div id="update-available" style="display: none" class="notification is-primary">
-                            <strong>New release available!</strong>
-                        </div>
-                        <button id="download-tungsteno-button" class="button is-fullwidth is-success"
-                            style="display: none;">Download Tungsteno</button>
-                    </div>
-                    <div class="block">
-                        <button id="new-document-button" class="button is-fullwidth is-warning"
-                            style="display: none;">Launch Tungsteno</button>
-                    </div>
-
-                    <div class="block">
-                        <progress id="download-progress-bar" style="display: none" class="progress is-small is-primary"
-                            max="100">Downloading...</progress>
-                    </div>
-                    <!--
-<aside class="menu">
-                        <p class="menu-label">
-                            Recent files
-                        </p>
-                        <ul class="menu-list">
-                            <li><a>Dashboard</a></li>
-                            <li><a>Customers</a></li>
-                        </ul>
-                    </aside>
-                    -->
-
+                <div id="update-available" style="display: none" class="notification is-primary">
+                    <strong>New release available!</strong>
                 </div>
+
+                <article class="panel is-primary">
+                    <p class="panel-heading">
+                        Your Tungsteno
+                    </p>
+                    <button id="download-tungsteno-button" class="button panel-block is-fullwidth is-success"
+                        style="display: none;">Download Tungsteno</button>
+                    <button id="new-document-button" class="button is-fullwidth panel-block is-warning"
+                        style="display: none;">Launch Tungsteno</button>
+                </article>
+            </div>
+
+            <div class="column">
+                <article class="panel is-primary has-background-white">
+                    <p class="panel-heading">
+                        Latest updates
+                    </p>
+                    <div id="latest-news">
+                        <button class="button is-fullwidth panel-block is-white is-loading">Launch
+                            Tungsteno</button>
+                    </div>
+
+                </article>
             </div>
     </section>
 
@@ -146,15 +171,6 @@
 
 <style>
     html {
-        background-color: #f8f8f8;
-        height: 100%;
-        overflow-y: auto;
-    }
-
-    body {
-        display: flex;
-        min-height: 100vh;
-        flex-direction: column;
         background:
             radial-gradient(black 3px, transparent 4px),
             radial-gradient(black 3px, transparent 4px),
@@ -164,16 +180,20 @@
             #fff;
         background-size: 109px 109px, 109px 109px, 100% 6px, 109px 109px, 109px 109px;
         background-position: 54px 55px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
+        height: 100%;
+        overflow-y: auto;
     }
 
     button {
         border: 3px;
     }
 
-    #wrapper {
+    footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
         width: 100%;
-
-        flex: 1;
+        height: 20px;
     }
 </style>
 
