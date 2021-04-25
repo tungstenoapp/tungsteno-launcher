@@ -1,0 +1,10 @@
+{
+    "dest": "build/debian-installer",
+    "icon": "assets/logo_app.png",
+    "categories": [
+        "Science"
+    ],
+    "lintianOverrides": [
+        "changelog-file-missing-in-native-package"
+    ]
+}
