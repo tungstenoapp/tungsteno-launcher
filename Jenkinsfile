@@ -30,7 +30,7 @@ pipeline {
                 sh "mcli cp build-linux.zip s3/tungsteno-releases/linux/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.zip"
                 sh "mcli cp build-windows.zip s3/tungsteno-releases/windows/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.zip"
                 sh "mcli cp build-windows.zip s3/tungsteno-releases/debian/installer/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.zip"
-                sh "mcli cp build/debian-installer/tungsteno-launcher_$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}_amd64.deb s3/tungsteno-releases/debian/installer/"
+                sh "mcli cp build/debian-installer/tungsteno-launcher_$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}_amd64.deb s3/tungsteno-releases/debian/installer/tungsteno-launcher-amd65_$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.deb"
 
             }
         }
