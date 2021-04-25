@@ -23,7 +23,7 @@ pipeline {
                 sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 "
 
                 sh "cd build/tungsteno-launcher-linux-x64; zip -r ../../build-linux.zip ."
-                sh "cd build/tungsteno-launcher-windows-x64; zip -r ../../build-windows.zip ."
+                sh "cd build/tungsteno-launcher-win32-x64; zip -r ../../build-windows.zip ."
 
                 sh "mcli cp build-linux.zip s3/tungsteno-releases/linux/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.zip"
                 sh "mcli cp build-windows.zip s3/tungsteno-releases/windows/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.zip"
