@@ -20,22 +20,14 @@ pipeline {
             steps {
                 sh "npm install"
                 sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite"
-                sh "cd build/tungsteno-launcher-linux-x64; zip -r ../../build.zip ."
-                sh "mcli cp build.zip s3/tungsteno-releases/linux/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.zip"
-            }
-        }
+                sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 "
 
-        stage('Generate build (Windows Binary)') {
-            agent { label 'Windows' }
-            steps{
-                checkout scm
+                sh "cd build/tungsteno-launcher-linux-x64; zip -r ../../build-linux.zip ."
+                sh "cd build/tungsteno-launcher-windows-x64; zip -r ../../build-windows.zip ."
 
-                bat "npm install"
-                bat "npx electron-packager . tungsteno-launcher --out build/ --overwrite"
-                bat "cd build/tungsteno-launcher-windows-x64; \"c:\\Program Files\\7-zip\\7z.exe\" a -tzip ..\\..\\build.zip -r ."
-                bat "C:\\mc.exe cp build.zip s3/tungsteno-releases/windows/%RELEASE_TYPE%/tungsteno-amd64-%MAJOR_RELEASE%.%MINOR_RELEASE%.%BUILD_ID%.zip"
+                sh "mcli cp build-linux.zip s3/tungsteno-releases/linux/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.zip"
+                sh "mcli cp build-windows.zip s3/tungsteno-releases/windows/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.zip"
 
-                deleteDir()
             }
         }
 
