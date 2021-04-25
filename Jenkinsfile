@@ -19,8 +19,8 @@ pipeline {
         stage('Generate build (Linux Binary)') {
             steps {
                 sh "npm install"
-                sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite"
-                sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 "
+                sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --icon=assets/logo_app.png"
+                sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png"
 
                 sh "cd build/tungsteno-launcher-linux-x64; zip -r ../../build-linux.zip ."
                 sh "cd build/tungsteno-launcher-win32-x64; zip -r ../../build-windows.zip ."
