@@ -21,6 +21,7 @@ function getInstallerConfig() {
         outputDirectory: path.join(outPath, 'windows-installer'),
         exe: 'tungsteno-launcher.exe',
         setupExe: 'TungstenoInstaller.exe',
+        setupMsi: 'TungstenoInstaller.msi',
         setupIcon: path.join(rootPath, 'assets', 'logo_app.ico')
     })
 }
