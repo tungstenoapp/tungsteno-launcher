@@ -24,6 +24,7 @@
   "dependencies": {
     "bulma": "^0.9.2",
     "download": "^8.0.0",
+    "electron-context-menu": "^2.5.1",
     "execa": "^1.0.0",
     "is-reachable": "^5.0.0",
     "nodejs-file-downloader": "^4.4.2",

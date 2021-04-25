@@ -9,18 +9,14 @@
     <link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css" />
 
     <script type="text/javascript">
-        function downloadLatestTungsteno(progressBar) {
-            progressBar.style.display = 'block';
+        function downloadLatestTungsteno() {
             let os = window.electron.getOS();
             let basePath = 'https://download.tungsteno.app/v1/releases/' + os + '/stable';
 
 
             return getLatestRelease().then(latestRelease => {
-                    return window.electron.downloadTungsteno(latestRelease, basePath)
-                })
-                .then(_ => {
-                    progressBar.style.display = 'none';
-                })
+                return window.electron.downloadTungsteno(latestRelease, basePath)
+            })
         }
 
         function getLatestRelease() {
@@ -36,6 +32,10 @@
                 });
         }
 
+        function getVersionString(release) {
+            return release['MajorRelease'] + '.' + release['MinorRelease'] + '.' + release['Compilation'];
+        }
+
         window.addEventListener('DOMContentLoaded', async () => {
             let newDocumentBtn = document.getElementById('new-document-button');
             let downloadBtn = document.getElementById('download-tungsteno-button');
@@ -48,10 +48,12 @@
                 downloadBtn.style.display = 'block';
             } else {
                 newDocumentBtn.style.display = 'block';
+                newDocumentBtn.innerHTML += ' ' + getVersionString(installedVersion)
             }
 
             downloadBtn.addEventListener('click', async function () {
-                await downloadLatestTungsteno(progressBar);
+                downloadBtn.classList.add('is-loading')
+                await downloadLatestTungsteno();
 
                 downloadBtn.style.display = 'none';
                 updateNotification.style.display = 'none';
@@ -60,14 +62,9 @@
             });
 
             newDocumentBtn.addEventListener('click', async function () {
-                progressBar.style.display = 'block';
-
-                console.log('HOLA')
+                newDocumentBtn.classList.add('is-loading');
 
                 await window.electron.launchTungsteno();
-
-                console.log('HOLA')
-
                 await window.electron.waitUntilTungstenoReachable();
                 window.location = 'http://localhost:8000';
             });
@@ -75,6 +72,8 @@
             let latestRelease = await getLatestRelease();
 
             if (installedVersion && latestRelease.Time > installedVersion.Time) {
+                updateNotification.innerHTML += "Your release is " + getVersionString(installedVersion) +
+                    ", newest release is " + getVersionString(latestRelease)
                 updateNotification.style.display = 'block';
                 downloadBtn.style.display = 'block';
             }
@@ -84,18 +83,26 @@
 </head>
 
 <body>
-    <section class="container">
+    <section id="wrapper" class="container">
+        <section class="hero is-primary is-small">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title has-shadow">
+                        Tungsteno Launcher
+                    </h1>
+                    <h2 class="subtitle">
+                        <span class="tag is-warning is-light">1.0</span>
+                        <span class="tag is-primary is-light">beta</span>
+                    </h2>
+                </div>
+            </div>
+        </section>
         <div class="columns p-3">
             <div class="column">
-                <h1 class="title is-1">Tungsteno Launcher</h1>
-                <h2 class="subtitle colored is-4">
-                    <span class="tag is-warning is-light">1.0</span>
-                    <span class="tag is-primary is-light">beta</span>
-                </h2>
                 <div class="block">
                     <div class="block">
                         <div id="update-available" style="display: none" class="notification is-primary">
-                            <strong>New release available!</strong> Please update!
+                            <strong>New release available!</strong>
                         </div>
                         <button id="download-tungsteno-button" class="button is-fullwidth is-success"
                             style="display: none;">Download Tungsteno</button>
@@ -124,12 +131,49 @@
                 </div>
             </div>
     </section>
+
+    <footer class="footer has-background-dark has-text-light">
+        <div class="content has-text-centered">
+            <p>
+                <strong style="color: white">Tungsteno</strong> made with <span style="color: red">❤️</span> by <a
+                    href="https://josecarlos.me">Jose
+                    Carlos</a>. The source code is licensed under <a
+                    href="https://github.com/tungstenoapp/Tungsteno/blob/master/LICENSE">GPLv3</a>.
+            </p>
+        </div>
+    </footer>
 </body>
 
 <style>
     html {
         background-color: #f8f8f8;
         height: 100%;
+        overflow-y: auto;
+    }
+
+    body {
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+        background:
+            radial-gradient(black 3px, transparent 4px),
+            radial-gradient(black 3px, transparent 4px),
+            linear-gradient(#fff 4px, transparent 0),
+            linear-gradient(45deg, transparent 74px, transparent 75px, #a4a4a4 75px, #a4a4a4 76px, transparent 77px, transparent 109px),
+            linear-gradient(-45deg, transparent 75px, transparent 76px, #a4a4a4 76px, #a4a4a4 77px, transparent 78px, transparent 109px),
+            #fff;
+        background-size: 109px 109px, 109px 109px, 100% 6px, 109px 109px, 109px 109px;
+        background-position: 54px 55px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
+    }
+
+    button {
+        border: 3px;
+    }
+
+    #wrapper {
+        width: 100%;
+
+        flex: 1;
     }
 </style>
 
