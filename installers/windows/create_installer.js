@@ -1,27 +1,39 @@
-const createWindowsInstaller = require('electron-winstaller').createWindowsInstaller
-const path = require('path')
+// ./build_installer.js
 
-getInstallerConfig()
-    .then(createWindowsInstaller)
-    .catch((error) => {
-        console.error(error.message || error)
-        process.exit(1)
-    })
+// 1. Import Modules
+const {
+    MSICreator
+} = require('electron-wix-msi');
+const path = require('path');
 
-function getInstallerConfig() {
-    console.log('creating windows installer')
-    const rootPath = path.join('./')
+// 2. Define input and output directory.
+// Important: the directories must be absolute, not relative e.g
+// appDirectory: "C:\\Users\sdkca\Desktop\OurCodeWorld-win32-x64",
+const APP_DIR = path.resolve(__dirname, './../../build/tungsteno-launcher-win32-x64');
+// outputDirectory: "C:\\Users\sdkca\Desktop\windows_installer",
+const OUT_DIR = path.resolve(__dirname, './../../build/windows_installer');
 
-    const outPath = path.join(rootPath, 'build')
+// 3. Instantiate the MSICreator
+const msiCreator = new MSICreator({
+    appDirectory: APP_DIR,
+    outputDirectory: OUT_DIR,
+    appIconPath: path.resolve(__dirname, './../../assets/logo_app.ico'),
+    // Configure metadata
+    description: 'This is a demo application',
+    exe: 'tungsteno-launcher',
+    name: 'Our Code World Desktop App',
+    manufacturer: 'Our Code World Inc',
+    version: '1.0.0',
 
-    return Promise.resolve({
-        appDirectory: path.join(rootPath, 'build', 'tungsteno-launcher-win32-x64'),
-        authors: 'José Carlos',
-        noMsi: false,
-        outputDirectory: path.join(outPath, 'windows-installer'),
-        exe: 'tungsteno-launcher.exe',
-        setupExe: 'TungstenoInstaller.exe',
-        setupMsi: 'TungstenoInstaller.msi',
-        setupIcon: path.join(rootPath, 'assets', 'logo_app.ico')
-    })
-}
+    // Configure installer User Interface
+    ui: {
+        chooseDirectory: true
+    },
+});
+
+// 4. Create a .wxs template file
+msiCreator.create().then(function () {
+
+    // Step 5: Compile the template to a .msi file
+    msiCreator.compile();
+});
