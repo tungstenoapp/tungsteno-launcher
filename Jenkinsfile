@@ -31,11 +31,12 @@ pipeline {
             }
         }
 
+/*
         stage('Clean up') {
             steps {
-                // deleteDir()
+                deleteDir()
             }
         }
-
+*/
     }
 }
