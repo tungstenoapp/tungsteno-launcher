@@ -1,6 +1,6 @@
 {
   "name": "tungsteno-launcher",
-  "version": "1.0.0",
+  "version": "prebuild",
   "description": "Tungsteno Launcher helps you run the latest versions of Tungsten from your computer.",
   "main": "index.js",
   "scripts": {
