@@ -40,7 +40,7 @@ pipeline {
         stage('Generate build (Windows Binary)') {
             agent { label 'Windows' }
             steps{
-                bat "C:\\mc.exe cps3/tungsteno-releases/windows/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.zip build-windows.zip"
+                bat "C:\\mc.exe cp s3/tungsteno-releases/windows/$RELEASE_TYPE/tungsteno-launcher-$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}.zip build-windows.zip"
                 bat "Call :UnZipFile \"C:\\Temp\" \"build-windows.zip\""
                 deleteDir()
             }
