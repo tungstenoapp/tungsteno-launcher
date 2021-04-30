@@ -41,6 +41,7 @@ pipeline {
             agent { label 'Windows' }
             steps{
                 checkout scm
+                bat "get-content package.json | %{$_ -replace \"prebuild\",\"%MAJOR_RELEASE%.%MINOR_RELEASE%.%BUILD_ID%\"}"
                 bat "npm install"
                 bat "node installers/windows/create_installer.js"
             }
