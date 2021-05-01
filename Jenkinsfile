@@ -42,6 +42,7 @@ pipeline {
             agent { label 'Windows' }
             steps{
                 checkout scm
+                bat "npm remove electron-installer-debian"
                 bat "npm install --also=dev"
                 bat "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png"
 
