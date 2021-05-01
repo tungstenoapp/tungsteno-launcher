@@ -43,6 +43,8 @@ pipeline {
                 checkout scm
                 bat "get-content package.json | %{$_ -replace \"prebuild\",\"%MAJOR_RELEASE%.%MINOR_RELEASE%.%BUILD_ID%\"}"
                 bat "npm install"
+                bat "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png"
+
                 bat "node installers/windows/create_installer.js"
             }
         }
