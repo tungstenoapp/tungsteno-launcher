@@ -15,8 +15,7 @@ pipeline {
                 sh 'printenv'
             }
         }
-
-/*/
+/*
         stage('Generate build (Linux Binary)') {
             steps {
                 sh "sed -i 's/1.0.0/$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}/g' package.json"
@@ -36,7 +35,6 @@ pipeline {
 
             }
         }
-
 */
         stage('Generate build (Windows Binary)') {
             agent { label 'Windows' }
@@ -45,8 +43,10 @@ pipeline {
                 bat "npm remove electron-installer-debian"
                 bat "npm install --also=dev"
                 bat "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png"
-
                 bat "node installers/windows/create_installer.js"
+                bat "C:\\mc.exe cp build/windows_installer/tungsteno-launcher.msi s3/tungsteno-releases/windows/installer/tungsteno-amd64-%MAJOR_RELEASE%.%MINOR_RELEASE%.%BUILD_ID%.msi"
+
+                deleteDir()
             }
         }
 

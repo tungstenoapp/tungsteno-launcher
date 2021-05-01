@@ -19,10 +19,10 @@ const msiCreator = new MSICreator({
     outputDirectory: OUT_DIR,
     appIconPath: path.resolve(__dirname, './../../assets/logo_app.ico'),
     // Configure metadata
-    description: 'This is a demo application',
+    description: 'Tungsteno Launcher helps you run the latest versions of Tungsten from your computer.',
     exe: 'tungsteno-launcher',
-    name: 'Our Code World Desktop App',
-    manufacturer: 'Our Code World Inc',
+    name: 'Tungsteno Launcher',
+    manufacturer: 'Tungsteno Community & Friends',
     version: '1.0.0',
 
     // Configure installer User Interface
