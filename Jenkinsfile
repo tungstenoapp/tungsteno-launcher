@@ -20,7 +20,7 @@ pipeline {
         stage('Generate build (Linux Binary)') {
             steps {
                 sh "sed -i 's/prebuild/$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}/g' package.json"
-                sh "npm install"
+                sh "npm install --include=dev"
                 sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --icon=assets/logo_app.png"
                 sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png"
 
@@ -42,7 +42,7 @@ pipeline {
             agent { label 'Windows' }
             steps{
                 checkout scm
-                bat "npm install"
+                bat "npm install --include=dev"
                 bat "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png"
 
                 bat "node installers/windows/create_installer.js"
