@@ -15,7 +15,7 @@ pipeline {
                 sh 'printenv'
             }
         }
-/*
+
         stage('Generate build (Linux Binary)') {
             steps {
                 sh "sed -i 's/1.0.0/$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}/g' package.json"
@@ -35,7 +35,7 @@ pipeline {
 
             }
         }
-*/
+
         stage('Generate build (Windows Binary)') {
             agent { label 'Windows' }
             steps{
