@@ -22,7 +22,7 @@ const msiCreator = new MSICreator({
     description: 'Tungsteno Launcher helps you run the latest versions of Tungsten from your computer.',
     exe: 'tungsteno-launcher',
     name: 'Tungsteno Launcher',
-    manufacturer: 'Tungsteno Community & Friends',
+    manufacturer: 'Tungsteno Community',
     version: '1.0.0',
 
     // Configure installer User Interface
