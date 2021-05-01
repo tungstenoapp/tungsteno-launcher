@@ -19,7 +19,7 @@ pipeline {
         stage('Generate build (Linux Binary)') {
             steps {
                 sh "sed -i 's/1.0.0/$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}/g' package.json"
-                sh "npm install --also=dev"
+                sh "npm install"
                 sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --icon=assets/logo_app.png"
                 sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png"
 
@@ -41,7 +41,7 @@ pipeline {
             steps{
                 checkout scm
                 bat "npm remove electron-installer-debian"
-                bat "npm install --also=dev"
+                bat "npm install"
                 bat "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png"
                 bat "node installers/windows/create_installer.js"
                 bat "C:\\mc.exe cp build/windows_installer/tungsteno-launcher.msi s3/tungsteno-releases/windows/installer/tungsteno-amd64-%MAJOR_RELEASE%.%MINOR_RELEASE%.%BUILD_ID%.msi"
