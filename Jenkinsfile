@@ -19,6 +19,8 @@ pipeline {
         stage('Generate build (Linux Binary)') {
             steps {
                 sh "sed -i 's/1.0.0/$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}/g' package.json"
+                sh "npm remove execa"
+
                 sh "npm install"
                 sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --icon=assets/logo_app.png"
                 sh "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png"
