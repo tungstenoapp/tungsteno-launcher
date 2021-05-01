@@ -16,6 +16,7 @@ pipeline {
             }
         }
 
+/*/
         stage('Generate build (Linux Binary)') {
             steps {
                 sh "sed -i 's/prebuild/$MAJOR_RELEASE.$MINOR_RELEASE.${BUILD_ID}/g' package.json"
@@ -36,12 +37,11 @@ pipeline {
             }
         }
 
-
+*/
         stage('Generate build (Windows Binary)') {
             agent { label 'Windows' }
             steps{
                 checkout scm
-                bat "get-content package.json | %{$_ -replace \"prebuild\",\"%MAJOR_RELEASE%.%MINOR_RELEASE%.%BUILD_ID%\"}"
                 bat "npm install"
                 bat "npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png"
 
