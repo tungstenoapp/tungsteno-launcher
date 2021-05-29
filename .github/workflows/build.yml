@@ -28,7 +28,7 @@ jobs:
 
       - name: Build tungsteno launcher
         run:
-          sh "sed -i 's/1.0.0/${{ env.release_id }}.${{ env.sha_short }}/g' package.json"
+          sed -i 's/1.0.0/${{ env.release_id }}.${{ env.sha_short }}/g' package.json
           npm remove execa
           npm install
           npx electron-packager . tungsteno-launcher --out build/ --overwrite --icon=assets/logo_app.png
