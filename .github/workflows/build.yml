@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
 
     steps:
       - name: Check out Git repository
@@ -17,7 +17,14 @@ jobs:
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 16
 
-      - name: Build/release Electron app
-        uses: samuelmeuli/action-electron-builder@v1
+      - name: Build tungsteno launcher
+        run:
+          npm remove execa
+          npm install
+          npx electron-packager . tungsteno-launcher --out build/ --overwrite --icon=assets/logo_app.png
+          npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png
+          npx electron-installer-debian --src build/tungsteno-launcher-linux-x64/ --arch amd64 --config installers/linux/debian.json
+          cd build/tungsteno-launcher-linux-x64; zip -r ../../build-linux.zip .
+          cd build/tungsteno-launcher-win32-x64; zip -r ../../build-windows.zip .
