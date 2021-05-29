@@ -14,6 +14,13 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v1
 
+      - name: Declare some variables
+        id: vars
+        shell: bash
+        run: |
+          echo "sha_short=$(date +%d%H%M )" >> $GITHUB_ENV
+          echo "release_id=1.$(date +%-m)" >> $GITHUB_ENV
+
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
         with:
@@ -21,6 +28,7 @@ jobs:
 
       - name: Build tungsteno launcher
         run:
+          sh "sed -i 's/1.0.0/${{ env.release_id }}.${{ env.sha_short }}/g' package.json"
           npm remove execa
           npm install
           npx electron-packager . tungsteno-launcher --out build/ --overwrite --icon=assets/logo_app.png
@@ -28,3 +36,16 @@ jobs:
           npx electron-installer-debian --src build/tungsteno-launcher-linux-x64/ --arch amd64 --config installers/linux/debian.json
           cd build/tungsteno-launcher-linux-x64; zip -r ../../build-linux.zip .
           cd build/tungsteno-launcher-win32-x64; zip -r ../../build-windows.zip .
+      
+      - uses: chrislennon/action-aws-cli@v1.1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      - run: 
+          aws s3 cp build-linux.zip s3://tungsteno-releases/linux/launcher/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }} --endpoint-url ${{ secrets.S3_ENDPOINT }}
+          aws s3 cp build-windows.zip s3://tungsteno-releases/windows/launcher/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }} --endpoint-url ${{ secrets.S3_ENDPOINT }}
+          aws s3 cp build/debian-installer/tungsteno-launcher_${{ env.release_id }}.${{ env.sha_short }}_amd64.deb s3://tungsteno-releases/debian/installer/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }}.deb --endpoint-url ${{ secrets.S3_ENDPOINT }}
+
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
