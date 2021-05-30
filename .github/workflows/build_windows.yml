@@ -1,0 +1,48 @@
+name: Build Windows
+
+on: push
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Declare some variables
+        id: vars
+        shell: bash
+        run: |
+          echo "sha_short=$(date +%d%H%M )" >> $GITHUB_ENV
+          echo "release_id=1.$(date +%-m)" >> $GITHUB_ENV
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Build tungsteno launcher
+        run:
+          sed -i 's/1.0.0/${{ env.release_id }}.${{ env.sha_short }}/g' package.json &&
+          npm remove execa &&
+          npm install &&
+          npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png &&
+          npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png &&
+          cd build/tungsteno-launcher-win32-x64; zip -r ../../build-windows.zip . 
+      
+      - uses: chrislennon/action-aws-cli@v1.1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      - run: 
+          aws s3 cp build-windows.zip s3://tungsteno-releases/windows/launcher/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }} --endpoint-url ${{ secrets.S3_ENDPOINT }} &&
+          aws s3 cp build/windows_installer/tungsteno-launcher.msi s3://tungsteno-releases/windows/installer/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }}.msi --endpoint-url ${{ secrets.S3_ENDPOINT }}
+
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
