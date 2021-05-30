@@ -44,8 +44,8 @@ jobs:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - run: 
           aws s3 cp build-linux.zip s3://tungsteno-releases/linux/launcher/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }}.zip --endpoint-url ${{ secrets.S3_ENDPOINT }} &&
-          aws s3 cp build/debian-installer/tungsteno-launcher_${{ env.release_id }}.${{ env.sha_short }}_amd64.deb s3://tungsteno-releases/debian/installer/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }}.deb --endpoint-url ${{ secrets.S3_ENDPOINT }}
-          aws s3 cp build-macos.zip s3://tungsteno-releases/macos/launcher/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }}.zip --endpoint-url ${{ secrets.S3_ENDPOINT }} &&
+          aws s3 cp build/debian-installer/tungsteno-launcher_${{ env.release_id }}.${{ env.sha_short }}_amd64.deb s3://tungsteno-releases/debian/installer/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }}.deb --endpoint-url ${{ secrets.S3_ENDPOINT }} &&
+          aws s3 cp build-macos.zip s3://tungsteno-releases/macos/launcher/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }}.zip --endpoint-url ${{ secrets.S3_ENDPOINT }} 
 
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
