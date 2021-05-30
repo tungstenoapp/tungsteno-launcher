@@ -35,6 +35,7 @@ jobs:
           npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=darwin --arch=x64 --overwrite --icon=assets/logo_app.png --asar &&
           npx electron-installer-debian --src build/tungsteno-launcher-linux-x64/ --arch amd64 --config installers/linux/debian.json &&
           cd build/tungsteno-launcher-linux-x64; zip -r ../../build-linux.zip . &&
+          cd build/ && ls &&
           cd build/tungsteno-launcher-darwin-x64; zip -r ../../build-macos.zip . 
 
       
