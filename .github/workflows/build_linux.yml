@@ -35,7 +35,7 @@ jobs:
           npx electron-installer-debian --src build/tungsteno-launcher-linux-x64/ --arch amd64 --config installers/linux/debian.json &&
           ls &&
           cd build/ && ls && cd .. 
-          # cd build/tungsteno-launcher-linux-x64; zip -r ../../build-linux.zip . &&
+          cd build/tungsteno-launcher-linux-x64; zip -r ../../build-linux.zip . &&
       
       - uses: chrislennon/action-aws-cli@v1.1
         env:
