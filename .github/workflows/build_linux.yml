@@ -1,4 +1,4 @@
-name: Build/release
+name: Build Linux
 
 on: push
 
@@ -32,19 +32,16 @@ jobs:
           npm remove execa &&
           npm install &&
           npx electron-packager . tungsteno-launcher --out build/ --overwrite --icon=assets/logo_app.png &&
-          npx electron-packager . tungsteno-launcher --out build/ --overwrite --platform=win32 --arch=x64 --icon=assets/logo_app.png && 
           npx electron-installer-debian --src build/tungsteno-launcher-linux-x64/ --arch amd64 --config installers/linux/debian.json &&
           ls &&
           cd build/ && ls && cd .. 
           # cd build/tungsteno-launcher-linux-x64; zip -r ../../build-linux.zip . &&
-          # cd build/tungsteno-launcher-win32-x64; zip -r ../../build-windows.zip . 
       
       - uses: chrislennon/action-aws-cli@v1.1
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       - run: 
           aws s3 cp build-linux.zip s3://tungsteno-releases/linux/launcher/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }} --endpoint-url ${{ secrets.S3_ENDPOINT }} &&
-          aws s3 cp build-windows.zip s3://tungsteno-releases/windows/launcher/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }} --endpoint-url ${{ secrets.S3_ENDPOINT }} &&
           aws s3 cp build/debian-installer/tungsteno-launcher_${{ env.release_id }}.${{ env.sha_short }}_amd64.deb s3://tungsteno-releases/debian/installer/tungsteno-launcher-${{ env.release_id }}.${{ env.sha_short }}.deb --endpoint-url ${{ secrets.S3_ENDPOINT }}
 
         env:
